@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0"/>
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <title>注册</title>
+    <link type="image/x-icon" rel="shortcut icon" href="../images/favicon.ico">
+    <link rel="stylesheet" href="../res/mui/css/mui.min.css"/>
+    <link rel="stylesheet" href="../res/fontAwesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../css/common.css"/>
+    <link rel="stylesheet" href="../css/user.css"/>
+</head>
+<body>
+<div class="cz_layout">
+    <header class="cz_topBar">
+        <a href="javascript:history.back();" class="icon_back fa fa-arrow-left"></a>
+        <span class="title">注册</span>
+    </header>
+    <div class="cz_container">
+        <form class="form_box">
+            <div class="mui-input-row">
+                <input name="username" type="text" placeholder="用户名">
+            </div>
+            <div class="mui-input-row">
+                <input name="mobile" type="text" placeholder="手机号">
+            </div>
+            <div class="mui-input-row">
+                <input name="password" type="password" placeholder="密码" class="mui-input-password">
+                <span class="mui-icon mui-icon-eye"></span>
+            </div>
+            <div class="mui-input-row">
+                <input name="rePass" type="password" placeholder="确认密码" class="mui-input-password">
+                <span class="mui-icon mui-icon-eye"></span>
+            </div>
+            <div class="mui-input-row">
+                <input name="vCode" type="text" placeholder="认证码">
+                <a href="javascript:;" class="btn_getCode mui-btn mui-btn-primary" >获取认证码</a>
+            </div>
+            <a href="index.html" class="mui-btn mui-btn-primary btn_login">注册</a>
+            <div class="mui-input-row cz_text">
+                <input type="checkbox" checked/> 我同意《会员服务协议》
+                <a href="login.html">立即登录</a>
+            </div>
+        </form>
+    </div>
+    <footer class="cz_tabs">
+        <a class="tab_home fa fa-home" href="../index.html"><span>首页</span></a>
+        <a class="tab_cate fa fa-bars" href="../cate.html"><span>分类</span></a>
+        <a class="tab_cart fa fa-shopping-cart" href="../cart.html"><span>购物车</span></a>
+        <a class="tab_user fa fa-user" href="../user/index.html"><span>会员中心</span></a>
+    </footer>
+</div>
+<script src="../res/mui/js/mui.min.js"></script>
+<script src="../js/jquery-1.12.4.js"></script>
+<script>
+    var phoneReg = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/;
+
+    $('.btn_getCode').on('click',function () {
+        $.ajax({
+            url:'/api/user/vCode',
+            type:'get',
+            success:function (data) {
+                $('input[name=vCode]').val(data.vCode);
+            }
+        });
+    });
+
+
+    $('.btn_login').on('click',function () {
+        // 验证
+        if (!phoneReg.test($('input[name=mobile]').val())) {
+            alert('请输入正确的手机号');
+            return false;
+        }
+
+        if ($('input[name=password]').val().trim() == '') {
+            alert('密码不能为空');
+            return false;
+        }
+
+        if ($('input[name=password]').val() != $('input[name=rePass]').val()) {
+            alert('两次密码不一致');
+            return false;
+        }
+      
+        if (!$(':checkbox').prop('checked')) {
+            alert('必须同意我们的霸王条款不然滚粗');
+            return false;
+        }
+
+        if (!$('input[name=vCode]').val().trim()) {
+            alert('请输入验证码');
+            return false;
+        }
+
+
+
+        var data = $('form').serialize();
+        // console.log(data);
+        $.ajax({
+            url:'/api/user/register',
+            type:'post',
+            data:data,
+            success:function (data) {
+                // console.log(data);
+                if (data.success) {
+                    location.href = 'login.html';
+                }else{
+                    alert(data.message);
+                }
+            }
+        });
+        return false;
+    });
+</script>
+</body>
+</html>
