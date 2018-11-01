@@ -44,7 +44,9 @@
 </div>
     <script src="../res/mui/js/mui.min.js"></script>
     <script>
-
+        if (location.href.split('url=')) {
+            var url = location.href.split('url=')[1];
+        }
         $('form').on('submit',function () {
             let data = $(this).serialize();
             // console.log(data)
@@ -56,7 +58,11 @@
                 success:function (data) {
                     // console.log(data);
                     if (data.success) {
-                        location.href = '/index.html';
+                        if (url) {
+                            location.href = url;
+                        }else {
+                            location.href = '/index.html';
+                        }
                     }
                     
                 }

@@ -63,7 +63,7 @@
         success:function (data) {
             // console.log(data);
             if (data.error) {
-                location.href = './login.html';
+                location.href = '/user/login.html?url=' + location.href;
             }else{
                 $('.mui-ellipsis').text(data.username);
                 $('.mui-media-body span').text('Hello '+ data.username);
@@ -78,7 +78,7 @@
             type:'get',
             success:function (data) {
                 if (data.success) {
-                    location.href = 'login.html';
+                    location.href = '/user/login.html';
                 }else {
                     alert('退出失败');
                 }
