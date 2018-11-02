@@ -58,11 +58,7 @@
                 success:function (data) {
                     // console.log(data);
                     if (data.success) {
-                        if (url) {
-                            location.href = url;
-                        }else {
-                            location.href = '/index.html';
-                        }
+                            location.href = url || '/index.html';
                     }
                     
                 }
