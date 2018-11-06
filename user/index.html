@@ -61,7 +61,7 @@
         url:'/api/user/queryUserMessage',
         type:'get',
         success:function (data) {
-            // console.log(data);
+            console.log(data);
             if (data.error) {
                 location.href = '/user/login.html?url=' + location.href;
             }else{

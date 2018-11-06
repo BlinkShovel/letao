@@ -12,6 +12,21 @@
     <link rel="stylesheet" href="../res/fontAwesome/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="../css/common.css"/>
     <link rel="stylesheet" href="../css/user.css"/>
+
+    <style>
+        .add {
+            text-align: center;
+        }
+        .add a {
+            display: inline-block;
+            background: skyblue;
+            margin-top: 20px;
+            color: #fff;
+            box-sizing: border-box;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
 </head>
 <body>
 <div class="cz_layout bgg">
@@ -20,8 +35,8 @@
         <span class="title">收货地址管理</span>
     </header>
     <div class="cz_container">
-        <ul class="mui-table-view">
-            <li class="mui-table-view-cell">
+        <ul class="mui-table-view" id="ul">
+            <!-- <li class="mui-table-view-cell">
                 <div class="mui-slider-right mui-disabled">
                     <a class="mui-btn mui-btn-red">删除</a>
                 </div>
@@ -29,26 +44,13 @@
                     <div class="delivery">邮编：<span>100000</span>&nbsp;收货人：<span>黄晓明</span></div>
                     <div class="address">北京市海淀区西三旗街道经验龙办公楼传智播客教育科技有限公司</div>
                 </a>
-            </li>
-            <li class="mui-table-view-cell">
-                <div class="mui-slider-right mui-disabled">
-                    <a class="mui-btn mui-btn-red">删除</a>
-                </div>
-                <a href="addressManage.html" class="mui-navigate-right mui-slider-handle">
-                    <div class="delivery">邮编：<span>100000</span>&nbsp;收货人：<span>黄晓明</span></div>
-                    <div class="address">北京市海淀区西三旗街道经验龙办公楼传智播客教育科技有限公司</div>
-                </a>
-            </li>
-            <li class="mui-table-view-cell">
-                <div class="mui-slider-right mui-disabled">
-                    <a class="mui-btn mui-btn-red">删除</a>
-                </div>
-                <a href="addressManage.html" class="mui-navigate-right mui-slider-handle">
-                    <div class="delivery">邮编：<span>100000</span>&nbsp;收货人：<span>黄晓明</span></div>
-                    <div class="address">北京市海淀区西三旗街道经验龙办公楼传智播客教育科技有限公司</div>
-                </a>
-            </li>
+            </li> -->
+            
         </ul>
+        <div class="add">
+            <a href="./addressManage.html">添加新地址</a>
+        </div>
+        
     </div>
     <footer class="cz_tabs">
         <a class="tab_home fa fa-home" href="../index.html"><span>首页</span></a>
@@ -58,5 +60,38 @@
     </footer>
 </div>
 <script src="../res/mui/js/mui.min.js"></script>
+<script src="../js/jquery-1.12.4.js"></script>
+<script src="../js/template-web.js"></script>
+
+<script type="text/template" id="tpl">
+    {{each list as val}}
+    <li class="mui-table-view-cell">
+        <div class="mui-slider-right mui-disabled">
+            <a class="mui-btn mui-btn-red">删除</a>
+        </div>
+        <a href="editressManage.html?id={{val.id}}" class="mui-navigate-right mui-slider-handle">
+            <div class="delivery">邮编：<span>{{val.postCode}}</span>&nbsp;收货人：<span>{{val.recipients}}</span></div>
+            <div class="address">{{val.address}} {{val.addressDetail}}</div>
+        </a>
+    </li>
+    {{/each}}
+</script>
+<script>
+    
+    $.ajax({
+        url:'/api/address/queryAddress',
+        type:'get',
+        success:function (data) {
+            console.log(data);
+            if (data.error) {
+                location.href = '/user/login.html?url=' + location.href;
+            }else{
+                // console.log(data);
+                let str = template('tpl',{list:data});
+                $('#ul').html(str);
+            }
+        }
+    });
+</script>
 </body>
 </html>
